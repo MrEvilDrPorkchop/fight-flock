@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FEED_97 // SURVEILLANCE_STATE</title>
+    <style>
+        /* --- CORE STYLING --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: #0d0d11;
+            color: #d1d1d6;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- THE HERO (FOLD 1) --- */
+        .hero {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* --- THE GLITCH HEADER --- */
+        h1 {
+            font-size: clamp(1.5rem, 5vw, 3.5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #ff3333;
+            text-shadow: 0 0 10px rgba(255, 51, 51, 0.4);
+            position: relative;
+        }
+
+        h1::before, h1::after {
+            content: "You live in a surveillance state.";
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0d0d11;
+        }
+
+        h1::before {
+            left: 2px; text-shadow: -2px 0 #00ffff;
+            clip: rect(44px, 9999px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+
+        h1::after {
+            left: -2px; text-shadow: -2px 0 #ff00ff;
+            clip: rect(85px, 9999px, 140px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        /* --- CCTV OVERLAYS --- */
+        .cctv-ui {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 10;
+        }
+
+        .corner {
+            position: absolute; width: 40px; height: 40px;
+            border-color: rgba(255, 51, 51, 0.3); border-style: solid;
+        }
+        .top-left { top: 20px; left: 20px; border-width: 4px 0 0 4px; }
+        .top-right { top: 20px; right: 20px; border-width: 4px 4px 0 0; }
+        .bottom-left { bottom: 20px; left: 20px; border-width: 0 0 4px 4px; }
+        .bottom-right { bottom: 20px; right: 20px; border-width: 0 4px 4px 0; }
+
+        .rec-status {
+            position: fixed; top: 40px; left: 80px;
+            color: #ff3333; font-weight: bold; z-index: 11;
+        }
+        .rec-dot {
+            height: 12px; width: 12px; background-color: #ff3333;
+            border-radius: 50%; display: inline-block; margin-right: 10px;
+            animation: blink 1.5s step-end infinite;
+        }
+
+        /* --- DATA CONTENT (FOLD 2) --- */
+        .content-section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 100px 20px;
+            z-index: 5;
+            position: relative;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-bottom: 60px;
+        }
+
+        .matrix-box {
+            background: rgba(20, 20, 25, 0.8);
+            border: 1px solid #333;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .matrix-num { font-size: 2.2rem; color: #fff; margin-bottom: 5px; font-weight: bold; }
+        .matrix-label { font-size: 0.75rem; color: #8e8e93; text-transform: uppercase; letter-spacing: 1px; }
+
+        .section-title {
+            margin: 50px 0 30px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ff3333;
+            border-bottom: 1px dashed #333;
+            padding-bottom: 10px;
+        }
+
+        .harm-log {
+            border-left: 2px solid #ff3333;
+            padding-left: 25px;
+            margin-bottom: 40px;
+        }
+
+        .harm-log h3 { color: #fff; text-transform: uppercase; margin-bottom: 10px; font-size: 1.1rem; }
+        .harm-log p { color: #8e8e93; line-height: 1.7; font-size: 0.95rem; }
+
+        /* --- CONTRAST / EXPOSURE BLOCK --- */
+        .exposure-panel {
+            background: rgba(255, 51, 51, 0.03);
+            border: 1px solid rgba(255, 51, 51, 0.2);
+            padding: 30px;
+            margin: 40px 0;
+            position: relative;
+        }
+        .exposure-panel::before {
+            content: "CRITICAL SECURITY BREACH LOG // DETECTED";
+            position: absolute; top: -10px; left: 20px;
+            background: #0d0d11; color: #ff3333; padding: 0 10px;
+            font-size: 0.75rem; font-weight: bold;
+        }
+        .corporate-claim {
+            border-bottom: 1px solid #222;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        .corporate-claim span { color: #00ffff; font-weight: bold; }
+        .reality-fact { padding-top: 5px; }
+        .reality-fact span { color: #ff3333; font-weight: bold; }
+
+        /* --- STALKING / CASE DATA BLOCKS --- */
+        .case-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .case-card {
+            background: rgba(15, 15, 20, 0.9);
+            border: 1px solid #222;
+            border-left: 4px solid #ff3333;
+            padding: 20px;
+        }
+
+        .case-meta {
+            font-size: 0.8rem;
+            color: #ff5252;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .case-card p {
+            color: #a1a1a8;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes blink { from, to { opacity: 1; } 50% { opacity: 0; } }
+        
+        @keyframes glitch-anim {
+            0% { clip: rect(31px, 9999px, 94px, 0); }
+            20% { clip: rect(62px, 9999px, 4px, 0); }
+            40% { clip: rect(15px, 9999px, 56px, 0); }
+            60% { clip: rect(89px, 9999px, 13px, 0); }
+            80% { clip: rect(56px, 9999px, 98px, 0); }
+            100% { clip: rect(67px, 9999px, 62px, 0); }
+        }
+
+        @keyframes glitch-anim2 {
+            0% { clip: rect(10px, 9999px, 65px, 0); }
+            20% { clip: rect(110px, 9999px, 120px, 0); }
+            40% { clip: rect(30px, 9999px, 40px, 0); }
+            60% { clip: rect(70px, 9999px, 80px, 0); }
+            80% { clip: rect(100px, 9999px, 110px, 0); }
+            100% { clip: rect(110px, 9999px, 120px, 0); }
+        }
+
+        .scroll-indicator {
+            position: absolute; bottom: 30px;
+            font-size: 0.7rem; color: #555;
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <!-- PERSISTENT CCTV ELEMENTS -->
+    <div class="cctv-ui">
+        <div class="corner top-left"></div>
+        <div class="corner top-right"></div>
+        <div class="corner bottom-left"></div>
+        <div class="corner bottom-right"></div>
+    </div>
+    
+    <div class="rec-status">
+        <span class="rec-dot"></span>LIVE_FEED // TARGET: FLOCK_AI_NET
+    </div>
+
+    <!-- FOLD 1: THE WARNING -->
+    <section class="hero">
+        <h1>You live in a surveillance state.</h1>
+        <div class="scroll-indicator">▼ Scroll to Access Archived Data ▼</div>
+    </section>
+
+    <!-- FOLD 2: THE EVIDENCE -->
+    <section class="content-section">
+        
+        <!-- DATA MATRIX -->
+        <div class="matrix-grid">
+            <div class="matrix-box">
+                <div class="matrix-num">1B+</div>
+                <div class="matrix-label">Plates Logged / Mo</div>
+            </div>
+            <div class="matrix-box">
+                <div class="matrix-num">29 / 30</div>
+                <div class="matrix-label">Cameras Default Overridden</div>
+            </div>
+            <div class="matrix-box">
+                <div class="matrix-num">63x</div>
+                <div class="matrix-label">Exec Sandbox Incursions</div>
+            </div>
+            <div class="matrix-box">
+                <div class="matrix-num">0%</div>
+                <div class="matrix-label">Proactive Audits</div>
+            </div>
+        </div>
+
+        <!-- MAIN SYSTEM OVERVIEW -->
+        <h2 class="section-title">The Backdoor Tracking Network</h2>
+
+        <div class="harm-log">
+            <h3>The Warrantless Dragnet</h3>
+            <p>Flock Safety builds sweeping automated license plate reader (ALPR) grids that trap timestamps and location footprints for everyday citizens. Individual officers log in with personal credentials across thousands of jurisdictions—meaning a tool meant for criminal investigations doubles as an unmonitored backdoor tool for personal tracking.</p>
+        </div>
+
+        <div class="harm-log">
+            <h3>The Secret Nationwide Leak</h3>
+            <p>Local police policies and explicit data restrictions are trivially bypassed by the hardware vendor itself. Recent municipal audits have exposed instances where Flock technicians activated "statewide" or "nationwide" sharing settings without city permission. This design vulnerability completely hollows out local democratic controls, blindly exposing localized movement paths directly to hundreds of outside state and federal agencies.</p>
+        </div>
+
+        <div class="harm-log">
+            <h3>Undetected Surveillance</h3>
+            <p>Police departments rarely audit their query histories. Abuse is systematically buried until a target notes the tracking themselves, or logs are forcefully cracked open by public transparency records. Alarmingly, Flock has actively targeted and attempted to suppress independent audit lookups like HaveIBeenFlocked.com.</p>
+        </div>
+
+        <!-- CORPORATE CLAIM VS REALITY EXPOSURE -->
+        <div class="exposure-panel">
+            <div class="corporate-claim">
+                <span>[FLOCK MARKET PROMISE]:</span> "No unauthorized users, including Flock Safety employees, have access to the footage or live networks."
+            </div>
+            <div class="reality-fact">
+                <span>[DOCUMENTED BREACH // INTERNAL COMPROMISE]:</span> Public network records requests busted this narrative wide open. Network audit logs revealed that Flock corporate staff systematically treat live police and community databases as private sales props.
+                <br><br>
+                On September 30, 2025, <strong>Bob Carter</strong> (Flock Safety’s VP of Business Development and registered corporate lobbyist) directly intercepted and viewed private camera infrastructure labeled <strong>"Gymnastics"</strong> at the Marcus Jewish Community Center in Atlanta, Georgia. 
+                <br><br>
+                <div style="background: rgba(255, 51, 51, 0.15); border: 1px dashed #ff3333; padding: 15px; margin: 10px 0;">
+                    <strong style="color: #fff;">[AUDIT ALERT // SYSTEMIC REPEATED ACCESS]:</strong> <br>
+                    Official network tracking logs confirm that Bob Carter manually penetrated and searched the live production database **63 separate times** over a single tracking window. Operating under a false profile that mirrored local law enforcement parameters, he used live citizen tracking data to query non-emergency environmental keywords—including manual lookups for a <strong>"yellow truck"</strong> and a <strong>"Person on skateboard."</strong>
+                </div>
+                <strong style="color: #fff; background: rgba(255, 51, 51, 0.2); padding: 2px 5px;">[LOG_ID: BC-V63 // CONFIRMED PATTERN]:</strong> Video-verified source logs confirm that live production data was systematically harvested by corporate personnel without the awareness, oversight, or explicit consent of the hosting municipal departments.
+            </div>
+        </div>
+
+        <!-- LOGGED INCIDENTS -->
+        <h2 class="section-title">Verified Log of Internal Abuse & System Failures</h2>
+        
+        <div class="case-grid">
+            <div class="case-card">
+                <div class="case-meta">File #01 // Orange City, FL // Off. Jarmarus Brown</div>
+                <p>Queried an individual's plate 69 times, her mother's 24 times, and her brother's 15 times, cross-referencing locations alongside a physical tracking device placed in the target's wallet. Action resulted in simple probation.</p>
+            </div>
+
+            <div class="case-card">
+                <div class="case-meta">File #02 // Milwaukee, WI // Off. Josue Ayala</div>
+                <p>Executed over 170 undocumented personal tracking queries targeting a woman and her acquaintance over a two-month span. Resigned prior to official misconduct prosecution.</p>
+            </div>
+
+            <div class="case-card">
+                <div class="case-meta">File #03 // Joplin, MO // Grassroots Audit</div>
+                <p>An independent audit by 'Deflock Joplin' extracted system logs revealing a single officer scanned one license plate 395 times in 10 months. The officer was terminated only after the data went public.</p>
+            </div>
+            
+            <div class="case-card">
+                <div class="case-meta">File #04 // Cross-Jurisdiction Patterns</div>
+                <p>Additional incidents involve a Kansas police chief systematically tracking an ex-partner's vehicle 164 times across four months, and a Florida officer executing 70 unchecked plate lookups in seven months to stalk a workplace environment.</p>
+            </div>
+
+            <div class="case-card" style="border-left-color: #ff3333; background: rgba(255,51,51,0.02);">
+                <div class="case-meta">File #05 // Mountain View, CA // COMPLETE SYSTEM SHUTDOWN</div>
+                <p><strong>Status: Suspended Immediately.</strong> Police Chief Mike Canfield pulled the plug on the city's entire Flock Safety ALPR array after an internal audit revealed Flock completely bypassed the city's strict data access protocols. 
+                <br><br>
+                Without municipal permission, Flock enabled a "nationwide" configuration on deployed cameras. As a result, local vehicle data was secretly extracted by outside elements, including the <strong>U.S. Bureau of Alcohol, Tobacco, Firearms and Explosives (ATF)</strong> offices in Kentucky and Nashville, TN; <strong>Langley Air Force Base</strong> in Virginia; the U.S. GSA Office of Inspector General; Lake Mead National Recreation Area in Nevada; and an Ohio Air Force Base. 29 out of 30 pilot cameras had "statewide" unmonitored harvesting enabled by default, breaching California law regarding unauthorized federal data transmission.</p>
+            </div>
+        </div>
+
+    </section>
+
+</body>
+</html>
